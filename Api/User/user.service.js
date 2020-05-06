@@ -3,14 +3,16 @@ const pool = require("../../config/database");
 module.exports = {
     create: (data, callBack) => {
         pool.query(
-            `insert into user(user_id, full_name, email, password, phone, gender, status, avatar)
-            values (?,?,?,?,?,?,?,?)`,
+            `insert into user(user_id, full_name, user_type, email, password, phone, address, gender, status, avatar)
+            values (?,?,?,?,?,?,?,?,?,?)`,
             [
                 ,
                 data.fullname,
+                data.usertype,
                 data.email,
                 data.password,
                 data.phone,
+                data.address,
                 data.gender,
                 1,
                 data.avatar
@@ -70,4 +72,16 @@ module.exports = {
             }
         );
     },
+    getCategories: callBack => {
+        pool.query(
+            `select * from category where cat_status=1`,
+            [],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    }
 };

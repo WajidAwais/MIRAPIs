@@ -1,4 +1,4 @@
-const { create, getUserById, updateUser, getUserByEmail } = require("./user.service");
+const { create, getUserById, updateUser, getUserByEmail, getCategories } = require("./user.service");
 
 const { sign } = require("jsonwebtoken")
 
@@ -79,11 +79,12 @@ module.exports = {
             if(result){
                 results.password = undefined;
                 const jsontoken = sign({ result: results }, "quarantine", {
-                    expiresIn: "1h"
+                    expiresIn: "5h"
                 });
                 return res.json({
                     success: 1,
                     message: "login successfully",
+                    data: results,
                     token: jsontoken
                 });
             }else{
@@ -92,6 +93,27 @@ module.exports = {
                     message: "Invalid Email or Password",
                 });
             }
+        });
+    },
+    getCategory: (req, res) => {
+        getCategories((err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
         });
     }
 }
