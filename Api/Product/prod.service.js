@@ -3,8 +3,8 @@ const pool = require("../../config/database");
 module.exports = {
     create: (data, callBack) => {
         pool.query(
-            `insert into product(product_id, renter_id, category_id, brand_id, title, description, date_added, status, price_per_day, actual_price)
-            values (?,?,?,?,?,?,?,?,?,?)`,
+            `insert into product(product_id, renter_id, category_id, brand_id, title, description, product_type, date_added, status, price_per_day, actual_price)
+            values (?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 ,
                 data.renterid,
@@ -12,6 +12,7 @@ module.exports = {
                 data.brandid,
                 data.title,
                 data.description,
+                data.product_type,
                 data.dateadded,
                 1,
                 data.priceperday,
@@ -56,6 +57,7 @@ module.exports = {
         );
     },
 
+
     getProdsByUserID: (id,callBack) => {
         pool.query(
             `select * from product where renter_id = ?` ,
@@ -77,6 +79,7 @@ module.exports = {
                 0,
                 productID
             ],
+
             (error, results, fields) => {
                 if(error) {
                     return callBack(error);
@@ -84,8 +87,6 @@ module.exports = {
                 return callBack(null, results);
             }
         );
-        
+
     },
-
-
 };

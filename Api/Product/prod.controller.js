@@ -1,4 +1,5 @@
-const { create, productpic, getprods,getProdsByUserID,updateProdStatus } = require("./prod.service");
+const { create, productpic, getprods, getProdsByUserID,updateProdStatus } = require("./prod.service");
+
 
 module.exports = {
     createProduct: (req, res) => {
@@ -55,6 +56,7 @@ module.exports = {
         });
     },
 
+
     getProductByUserID: (req, res) => {
         const id = req.params.id
         getProdsByUserID(id, (err, results) => {
@@ -78,6 +80,7 @@ module.exports = {
         });
     },
 
+
     disableProduct: (req, res) => {
         const id = req.body.product_id;
         updateProdStatus(id, (err, results) => {
@@ -94,7 +97,4 @@ module.exports = {
             })
         });
     }
-
-
-
 }
