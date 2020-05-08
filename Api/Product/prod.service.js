@@ -54,5 +54,38 @@ module.exports = {
                 return callBack(null, results);
             }
         );
-    }
+    },
+
+    getProdsByUserID: (id,callBack) => {
+        pool.query(
+            `select * from product where renter_id = ?` ,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+
+    updateProdStatus: (productID, callBack) => {
+        
+        pool.query(
+            `update product set status=? where product_id = ?`,
+            [
+                0,
+                productID
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+        
+    },
+
+
 };

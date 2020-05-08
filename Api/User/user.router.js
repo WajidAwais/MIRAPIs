@@ -8,5 +8,6 @@ router.get("/:id",checkToken,getUserByUserId);
 router.patch("/",checkToken,updateUserById);
 router.get("/cat",checkToken,getCategory);
 
+
 router.post("/login",login);
 module.exports = router;
