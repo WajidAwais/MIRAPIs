@@ -3,8 +3,8 @@ const pool = require("../../config/database");
 module.exports = {
     create: (data, callBack) => {
         pool.query(
-            `insert into product(product_id, renter_id, category_id, brand_id, title, description, date_added, status, price_per_day, actual_price)
-            values (?,?,?,?,?,?,?,?,?,?)`,
+            `insert into product(product_id, renter_id, category_id, brand_id, title, description, product_type, date_added, status, price_per_day, actual_price)
+            values (?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 ,
                 data.renterid,
@@ -12,6 +12,7 @@ module.exports = {
                 data.brandid,
                 data.title,
                 data.description,
+                data.product_type,
                 data.dateadded,
                 1,
                 data.priceperday,
@@ -54,5 +55,41 @@ module.exports = {
                 return callBack(null, results);
             }
         );
-    }
+    },
+    getRentingProds: callBack => {
+        pool.query(
+            `select p.*, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && product_type='rent' && pic.is_main_picture=1` ,
+            [],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    getSaleProds: callBack => {
+        pool.query(
+            `select p.*, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && product_type='sale' && pic.is_main_picture=1` ,
+            [],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    getProdByCat: (id, callBack) => {
+        pool.query(
+            `select p.*, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && p.category_id=? && pic.is_main_picture=1` ,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
 };
