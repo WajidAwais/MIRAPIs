@@ -39,17 +39,16 @@ module.exports = {
         );
     },
     updateUser: (data, callBack) => {
+        console.log("Hello"+data.avatar);
         pool.query(
-            `update user set full_name=?, email=?, password=?, phone=?, gender=?, status=?, avatar=? where user_id = ?`,
+            `update user set full_name=?, email=?, phone=?, avatar=?,address=? where user_id = ?`,
             [
                 data.fullname,
                 data.email,
-                data.password,
                 data.phone,
-                data.gender,
-                data.status,
                 data.avatar,
-                data.id
+                data.address,
+                data.user_id
             ],
             (error, results, fields) => {
                 if(error) {

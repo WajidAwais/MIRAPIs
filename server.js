@@ -12,10 +12,20 @@ const storage = multer.diskStorage({
     }
 })
 
+const avatarStorage = multer.diskStorage({
+    destination: './upload/avatars',
+    filename: (req, file, cb)=>{
+        return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+    }
+})
+
 const upload = multer({
     storage: storage
 })
 
+const avatarUpload = multer({
+    storage:avatarStorage
+})
 const userRouter = require("./Api/User/user.router");
 const catRouter = require("./Api/Category/cat.router");
 const brandRouter = require("./Api/Brand/brand.router");
@@ -48,6 +58,15 @@ app.post("/upload",upload.single('product'), (req, res) => {
     res.json({
         success: 1,
         product_url: `http://localhost:5000/product/${req.file.filename}`
+    })
+})
+
+app.use('/avatar', express.static('upload/Avatars'));
+app.post("/avatarUpload",avatarUpload.single('avatar'), (req, res) => {
+    console.log(req.files);
+    res.json({
+        success: 1,
+        avatar_url: `http://localhost:5000/avatar/${req.file.filename}`
     })
 })
 
