@@ -56,33 +56,11 @@ module.exports = {
             }
         );
     },
-    getRentingProds: callBack => {
+
+
+    getProdsByUserID: (id,callBack) => {
         pool.query(
-            `select p.*, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && product_type='rent' && pic.is_main_picture=1` ,
-            [],
-            (error, results, fields) => {
-                if(error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    getSaleProds: callBack => {
-        pool.query(
-            `select p.*, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && product_type='sale' && pic.is_main_picture=1` ,
-            [],
-            (error, results, fields) => {
-                if(error) {
-                    return callBack(error);
-                }
-                return callBack(null, results);
-            }
-        );
-    },
-    getProdByCat: (id, callBack) => {
-        pool.query(
-            `select p.*, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && p.category_id=? && pic.is_main_picture=1` ,
+            `select * from product where renter_id = ?` ,
             [id],
             (error, results, fields) => {
                 if(error) {
@@ -91,5 +69,24 @@ module.exports = {
                 return callBack(null, results);
             }
         );
+    },
+
+    updateProdStatus: (productID, callBack) => {
+        
+        pool.query(
+            `update product set status=? where product_id = ?`,
+            [
+                0,
+                productID
+            ],
+
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+
     },
 };
