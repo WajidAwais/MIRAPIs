@@ -89,4 +89,45 @@ module.exports = {
         );
 
     },
+
+    update: (data, callBack) => {
+        pool.query(
+            `update product set  category_id=?, brand_id=?, title=? , description=? ,product_type=? ,date_added=? , price_per_day=?, actual_price=? where product_id=?`,
+            [
+                data.catid,
+                data.brandid,
+                data.title,
+                data.description,
+                data.product_type,
+                data.dateadded,
+                data.priceperday,
+                data.actualprice,
+                data.productid,
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    productpicupdate: (data, callBack) => {
+        pool.query(
+            `update picture set picture_file_name=?, is_main_picture=? where product_id=?`,
+            [
+                data.picname,
+                data.ismain,
+                data.prodid
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+
+
 };
