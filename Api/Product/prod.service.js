@@ -56,8 +56,6 @@ module.exports = {
             }
         );
     },
-
-
     getProdsByUserID: (id,callBack) => {
         pool.query(
             `select * from product where renter_id = ?` ,
@@ -70,7 +68,6 @@ module.exports = {
             }
         );
     },
-
     updateProdStatus: (productID, callBack) => {
         
         pool.query(
@@ -88,5 +85,59 @@ module.exports = {
             }
         );
 
+    },
+    getPicsByProdId: (productID, callBack) => {
+        pool.query(
+            `select * from picture where product_id = ? && is_main_picture = 0 LIMIT 4`,
+            [productID],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+
+    },
+    rentRecord: (data, callBack) => {
+        pool.query(
+            `insert into rent_record(rent_id, rentee_id, product_id, on_rent, payment_method, rent_from, rent_to)
+            values (?,?,?,?,?,?,?)`,
+            [
+                ,
+                data.renteeid,
+                data.prodid,
+                data.onrent,
+                data.paymentmethod,
+                data.from,
+                data.to,
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    sellRecord: (data, callBack) => {
+        pool.query(
+            `insert into sell_record(sell_id, buyer_id, product_id, sell_out, payment_method, sell_date)
+            values (?,?,?,?,?,?)`,
+            [
+                ,
+                data.buyerid,
+                data.prodid,
+                data.sellout,
+                data.paymentmethod,
+                data.selldate,
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
     },
 };
