@@ -1,4 +1,4 @@
-const { create, productpic, getprods, getProdsByUserID,updateProdStatus } = require("./prod.service");
+const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate } = require("./prod.service");
 
 
 module.exports = {
@@ -96,5 +96,41 @@ module.exports = {
                 message: "updated successfully"
             })
         });
-    }
+    },
+
+    updateProduct: (req, res) => {
+        const body = req.body;
+        update(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            return res.status(200).json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+
+    updatePicture: (req, res) => {
+        const body = req.body;
+        productpicupdate(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            return res.status(200).json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+
+
 }
