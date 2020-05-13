@@ -46,7 +46,7 @@ module.exports = {
     },
     getprods: callBack => {
         pool.query(
-            `select p.*, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && pic.is_main_picture=1` ,
+            `select p.product_id,p.renter_id,p.category_id,p.brand_id,p.title,p.product_type,p.description,LEFT(p.date_added,10) AS date_added,IF(p.status=1,'active','inactive') as status,p.price_per_day,p.actual_price, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && pic.is_main_picture=1` ,
             [],
             (error, results, fields) => {
                 if(error) {

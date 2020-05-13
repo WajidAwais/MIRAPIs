@@ -26,6 +26,18 @@ module.exports = {
         );
         
     },
+    getUserEmail: (email, callBack) => {
+        pool.query(
+            `select email from user where email=?`,
+            [email],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results[0]);
+            }
+        );
+    },
     getUserById: (id, callBack) => {
         pool.query(
             `select * from user where user_id= ?`,
