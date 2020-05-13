@@ -1,4 +1,5 @@
-const { create, productpic, getprods, getProdsByUserID,updateProdStatus,getPicsByProdId, rentRecord, sellRecord } = require("./prod.service");
+
+const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord } = require("./prod.service");
 
 
 module.exports = {
@@ -131,9 +132,51 @@ module.exports = {
             })
         });
     },
+          
+          
+          
+          
+    updateProduct: (req, res) => {
+        const body = req.body;
+        update(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            return res.status(200).json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+
     sellProdRecord: (req, res) => {
         const body = req.body;
         sellRecord(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            return res.status(200).json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+          
+          
+          
+          
+          
+    updatePicture: (req, res) => {
+        const body = req.body;
+        productpicupdate(body, (err, results) => {
             if(err){
                 console.log(err);
                 return res.status(500).json({

@@ -1,13 +1,7 @@
 
-const { createProduct,
-        createProdpic,
-        getAllProd,
-        getProductByUserID,
-        disableProduct,
-        getPicsByProd,
+const { createProduct, createProdpic, getAllProd,getProductByUserID,disableProduct,updateProduct,updatePicture,getPicsByProd,
         rentProdRecord,
-        sellProdRecord
-     } = require("./prod.controller");
+        sellProdRecord } = require("./prod.controller");
 
 const router = require("express").Router();
 const { checkToken } = require("../../Auth/token_validation");
@@ -24,5 +18,6 @@ router.post("/RentRecord",checkToken,rentProdRecord);
 
 router.post("/SellRecord",checkToken,sellProdRecord);
 
-
+router.patch("/UpdateProduct",checkToken,updateProduct);
+router.patch("/UpdatePicture",checkToken,updatePicture);
 module.exports = router;
