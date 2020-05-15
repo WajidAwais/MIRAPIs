@@ -4,7 +4,7 @@ const router = require("express").Router();
 const { checkToken } = require("../../Auth/token_validation");
 
 router.post("/",createUser);
-router.get("/:id",checkToken,getUserByUserId);
+router.get("/:id",getUserByUserId);
 router.patch("/",checkToken,updateUserById);
 router.get("/cat",checkToken,getCategory);
 router.post("/Email",getEmail);

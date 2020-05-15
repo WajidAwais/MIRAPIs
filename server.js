@@ -60,11 +60,12 @@ app.post("/upload",upload.single('product'), (req, res) => {
         success: 1,
         product_url: `http://localhost:5000/product/${req.file.filename}`
     })
-
+    
     Jimp.read(`http://localhost:5000/product/${req.file.filename}`)
     .then(lenna => {    
         return lenna
         .contain(300, 300) // resize
+        .quality(100) // quality
         .write(`upload/images/${req.file.filename}`); // save
     })
     .catch(err => {

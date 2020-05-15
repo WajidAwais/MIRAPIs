@@ -53,13 +53,14 @@ module.exports = {
     updateUser: (data, callBack) => {
         console.log("Hello"+data.avatar);
         pool.query(
-            `update user set full_name=?, email=?, phone=?, avatar=?,address=? where user_id = ?`,
+            `update user set full_name=?, email=?, phone=?, avatar=?,address=?,about=? where user_id = ?`,
             [
                 data.fullname,
                 data.email,
                 data.phone,
                 data.avatar,
                 data.address,
+                data.about,
                 data.user_id
             ],
             (error, results, fields) => {
