@@ -46,7 +46,7 @@ module.exports = {
     },
     getprods: callBack => {
         pool.query(
-            `select p.*, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && pic.is_main_picture=1` ,
+            `select p.product_id,p.renter_id,p.category_id,p.brand_id,p.title,p.product_type,p.description,LEFT(p.date_added,10) AS date_added,IF(p.status=1,'active','inactive') as status,p.price_per_day,p.actual_price, pic.picture_file_name from product p join picture pic on(p.product_id=pic.product_id) where p.status=1 && pic.is_main_picture=1 ORDER BY p.product_id DESC;` ,
             [],
             (error, results, fields) => {
                 if(error) {
@@ -86,7 +86,6 @@ module.exports = {
         );
 
     },
-  
     getPicsByProdId: (productID, callBack) => {
         pool.query(
             `select * from picture where product_id = ? && is_main_picture = 0 LIMIT 4`,
@@ -121,8 +120,7 @@ module.exports = {
             }
         );
     },    
-  
-  update: (data, callBack) => {
+    update: (data, callBack) => {
         pool.query(
             `update product set  category_id=?, brand_id=?, title=? , description=? ,product_type=? ,date_added=? , price_per_day=?, actual_price=? where product_id=?`,
             [
@@ -144,8 +142,7 @@ module.exports = {
             }
         );
     },
-  
-  sellRecord: (data, callBack) => {
+    sellRecord: (data, callBack) => {
         pool.query(
             `insert into sell_record(sell_id, buyer_id, product_id, sell_out, payment_method, sell_date)
             values (?,?,?,?,?,?)`,
@@ -165,7 +162,6 @@ module.exports = {
             }
         );
     },
-  
     productpicupdate: (data, callBack) => {
         pool.query(
             `update picture set picture_file_name=?, is_main_picture=? where product_id=?`,
