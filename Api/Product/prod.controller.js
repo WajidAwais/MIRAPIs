@@ -132,10 +132,6 @@ module.exports = {
             })
         });
     },
-          
-          
-          
-          
     updateProduct: (req, res) => {
         const body = req.body;
         update(body, (err, results) => {
@@ -152,7 +148,6 @@ module.exports = {
             })
         });
     },
-
     sellProdRecord: (req, res) => {
         const body = req.body;
         sellRecord(body, (err, results) => {
@@ -169,11 +164,6 @@ module.exports = {
             })
         });
     },
-          
-          
-          
-          
-          
     updatePicture: (req, res) => {
         const body = req.body;
         productpicupdate(body, (err, results) => {
