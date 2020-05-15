@@ -6,8 +6,6 @@ const multer = require("multer");
 const path = require("path");
 
 
-var Jimp = require('jimp');
-
 
 const storage = multer.diskStorage({
     destination: './upload/images',
@@ -58,39 +56,20 @@ app.use("/Api/Product", prodRouter);
 
 app.use('/product', express.static('upload/images'));
 app.post("/upload",upload.single('product'), (req, res) => {
+    console.log(req.files);
     res.json({
         success: 1,
         product_url: `http://localhost:5000/product/${req.file.filename}`
     })
-    
-    Jimp.read(`http://localhost:5000/product/${req.file.filename}`)
-    .then(lenna => {    
-        return lenna
-        .contain(300, 300) // resize
-        .quality(100) // quality
-        .write(`upload/images/${req.file.filename}`); // save
-    })
-    .catch(err => {
-        console.error(err);
-    });
 })
 
 app.use('/avatar', express.static('upload/Avatars'));
 app.post("/avatarUpload",avatarUpload.single('avatar'), (req, res) => {
-    
-    Jimp.read(`http://localhost:5000/avatar/${req.file.filename}`)
-    .then(lenna => {
-        res.json({
-            success: 1,
-            avatar_url: `http://localhost:5000/avatar/${req.file.filename}`
-        })
-        return lenna
-        .contain(300, 300) // resize
-        .write(`upload/Avatars/${req.file.filename}`); // save
+    console.log(req.files);
+    res.json({
+        success: 1,
+        avatar_url: `http://localhost:5000/avatar/${req.file.filename}`
     })
-    .catch(err => {
-        console.error(err);
-    });
 })
 
 
