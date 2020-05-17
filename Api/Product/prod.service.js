@@ -101,16 +101,18 @@ module.exports = {
     },
     rentRecord: (data, callBack) => {
         pool.query(
-            `insert into rent_record(rent_id, rentee_id, product_id, on_rent, payment_method, rent_from, rent_to)
-            values (?,?,?,?,?,?,?)`,
+            `insert into rent_record(rent_id, rentee_id, product_id, on_rent, payment_method, shipment_address, contact_number, rent_from, days)
+            values (?,?,?,?,?,?,?,?,?)`,
             [
                 ,
                 data.renteeid,
                 data.prodid,
                 data.onrent,
                 data.paymentmethod,
+                data.address,
+                data.contact,
                 data.from,
-                data.to,
+                data.days,
             ],
             (error, results, fields) => {
                 if(error) {
@@ -144,14 +146,15 @@ module.exports = {
     },
     sellRecord: (data, callBack) => {
         pool.query(
-            `insert into sell_record(sell_id, buyer_id, product_id, sell_out, payment_method, sell_date)
-            values (?,?,?,?,?,?)`,
+            `insert into sell_record(sell_id, buyer_id, product_id, payment_method, shipment_address, contact_number,sell_date)
+            values (?,?,?,?,?,?,?)`,
             [
                 ,
                 data.buyerid,
                 data.prodid,
-                data.sellout,
                 data.paymentmethod,
+                data.address,
+                data.contact,
                 data.selldate,
             ],
             (error, results, fields) => {
@@ -170,6 +173,54 @@ module.exports = {
                 data.ismain,
                 data.prodid
             ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    onRentProdsByUserId: (id,callBack) => {
+        pool.query(
+            `SELECT p.title, u.full_name, LEFT(r.rent_from,10) as rent_from, r.days, price_per_day from product p join rent_record r on (r.product_id = p.product_id) join user u on(r.rentee_id = u.user_id) where r.on_rent = 1 and p.renter_id = ?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    ProdsHistoryByRentee: (id,callBack) => {
+        pool.query(
+            `SELECT p.title, u.full_name, LEFT(r.rent_from,10) as rent_from, r.days, p.price_per_day*r.days as price_per_day from product p join rent_record r on (r.product_id = p.product_id) join user u on(p.renter_id = u.user_id) where r.on_rent = 0 and r.rentee_id = ?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    onRentProdsByRentee: (id,callBack) => {
+        pool.query(
+            `SELECT p.title, u.full_name, LEFT(r.rent_from,10) as rent_from, r.days, p.price_per_day*r.days as price_per_day from product p join rent_record r on (r.product_id = p.product_id) join user u on(p.renter_id = u.user_id) where r.on_rent = 1 and r.rentee_id = ?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    updateRentStatus: (id,callBack) => {
+        pool.query(
+            `update rent_record set on_rent=0 where id = ?`,
+            [id],
             (error, results, fields) => {
                 if(error) {
                     return callBack(error);
