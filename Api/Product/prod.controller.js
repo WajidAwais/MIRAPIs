@@ -1,5 +1,5 @@
 
-const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord } = require("./prod.service");
+const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord, onRentProdsByUserId, ProdsHistoryByRentee, onRentProdsByRentee, updateRentStatus } = require("./prod.service");
 
 
 module.exports = {
@@ -177,6 +177,88 @@ module.exports = {
             return res.status(200).json({
                 success: 1,
                 data: results
+            })
+        });
+    },
+    onRentProductsByUserId: (req, res) => {
+        const id = req.params.id
+        onRentProdsByUserId(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    ProductsHistoryRentee: (req, res) => {
+        const id = req.params.id
+        ProdsHistoryByRentee(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    onRentProductsByRentee: (req, res) => {
+        const id = req.params.id
+        onRentProdsByRentee(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    updateRentRecordStatus: (req, res) => {
+        const id = req.body.product_id;
+        updateRentStatus(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            return res.json({
+                success: 1,
+                message: "updated successfully"
             })
         });
     },
