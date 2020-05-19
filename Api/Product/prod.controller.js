@@ -1,5 +1,5 @@
 
-const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord, onRentProdsByUserId, ProdsHistoryByRentee, onRentProdsByRentee, updateRentStatus } = require("./prod.service");
+const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord, onRentProdsByUserId, ProdsHistoryByRentee, onRentProdsByRentee, updateRentStatus, ProdsHistoryByUserId, BuyProdsHistory, SellProdsHistory } = require("./prod.service");
 
 
 module.exports = {
@@ -79,8 +79,8 @@ module.exports = {
         });
     },
     disableProduct: (req, res) => {
-        const id = req.body.product_id;
-        updateProdStatus(id, (err, results) => {
+        const data = req.body;
+        updateProdStatus(data, (err, results) => {
             if(err){
                 console.log(err);
                 return res.status(500).json({
@@ -202,6 +202,28 @@ module.exports = {
             })
         });
     },
+    ProductsHistoryByUserId: (req, res) => {
+        const id = req.params.id
+        ProdsHistoryByUserId(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
     ProductsHistoryRentee: (req, res) => {
         const id = req.params.id
         ProdsHistoryByRentee(id, (err, results) => {
@@ -259,6 +281,50 @@ module.exports = {
             return res.json({
                 success: 1,
                 message: "updated successfully"
+            })
+        });
+    },
+    BuyProductsHistory: (req, res) => {
+        const id = req.params.id
+        BuyProdsHistory(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    SellProductsHistory: (req, res) => {
+        const id = req.params.id
+        SellProdsHistory(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
             })
         });
     },
