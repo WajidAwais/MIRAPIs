@@ -13,7 +13,8 @@
     "mysql": "^2.18.1",
     "nodemon": "^2.0.3",
     "stripe": "^8.51.0",
-    "uuid": "^8.0.0"
+    "uuid": "^8.0.0",
+    "uuidv4": "^6.0.8"
   },
   "devDependencies": {},
   "scripts": {
