@@ -5,7 +5,9 @@ const app = express();
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
-const uuid = require("uuid/dist/v4");
+// const uuid = require("uuid/dist/v4");
+const { v4: uuidv4 } = require('uuid');
+
 
 var Jimp = require('jimp');
 
@@ -23,31 +25,31 @@ app.use(allowCrossDomain);
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-app.post("/charge",(req, res)=>{
+// app.post("/charge",(req, res)=>{
     
-    const {instrument, token} = req.body;
-    const idempontencyKey = uuid();
+//     const {instrument, token} = req.body;
+//     const idempontencyKey = uuidv4();
 
-    return stripe.customers.create({
-        email: token.email,
-        source: token.id
-    }).then(customer => {
-        stripe.charge.create({
-            amount: instrument.price * 100,
-            currency: 'usd',
-            customer: customer.id,
-            receipt_email: token.email,
-            destination: `purchase of Instrument instrument.name`,
-            shipping: {
-                name: token.card.name,
-                address:{
-                    country: token.card.address_country
-                }
-            }
+//     stripe.customers.create({
+//         email: token.email,
+//         source: token.id
+//     }).then(customer => {
+//         return stripe.charges.create({
+//             amount: instrument.price * 100,
+//             currency: 'usd',
+//             customer: customer.id,
+//             receipt_email: token.email,
+//             destination: `purchase of Instrument instrument.name`,
+//             shipping: {
+//                 name: token.card.name,
+//                 address:{
+//                     country: token.card.address_country
+//                 }
+//             }
 
-        },{idempontencyKey})
-    }).then(result => res.status(200).json(result))
-    .catch(err => console.log(err))
+//         },{idempontencyKey})
+//     }).then(result => res.status(200).json(result))
+//     .catch(err => console.log(err))
 
 
     // try {
@@ -76,7 +78,46 @@ app.post("/charge",(req, res)=>{
     //   }
       
       
-})
+// })
+
+
+app.post('/payment', function(req, res){ 
+  
+    // Moreover you can take more details from user 
+    // like Address, Name, etc from form 
+    const {instrument, token, amount} = req.body;
+    // console.log(token);
+    // console.log(instrument);
+    
+    stripe.customers.create({ 
+        email: token.email, 
+        source: token.id, 
+        name: token.card.name, 
+        address: { 
+            line1: '', 
+            postal_code: '54777', 
+            city: 'Lahore', 
+            state: 'Punjab', 
+            country: 'Pakistan', 
+        } 
+    }) 
+    .then((customer) => { 
+  
+        return stripe.charges.create({ 
+            amount: amount, 
+            description: `purchase of Instrument ${instrument.title}`, 
+            currency: 'PKR', 
+            customer: customer.id 
+        }); 
+    }) 
+    .then((charge) => { 
+        res.send("Success")  // If no error occurs 
+    }) 
+    .catch((err) => { 
+        res.send(err)       // If some error occurs 
+    }); 
+}) 
+  
 
 
 app.post("/withdraw",(req,res)=>{
