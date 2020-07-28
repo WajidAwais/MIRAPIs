@@ -170,6 +170,13 @@ const avatarStorage = multer.diskStorage({
     }
 })
 
+const coursepicStorage = multer.diskStorage({
+    destination: './upload/CoursePics',
+    filename: (req, file, cb)=>{
+        return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+    }
+})
+
 const upload = multer({
     storage: storage
 })
@@ -177,11 +184,19 @@ const upload = multer({
 const avatarUpload = multer({
     storage:avatarStorage
 })
+
+const coursepicUpload = multer({
+    storage:coursepicStorage
+})
+
+
+
+
 const userRouter = require("./Api/User/user.router");
 const catRouter = require("./Api/Category/cat.router");
 const brandRouter = require("./Api/Brand/brand.router");
 const prodRouter = require("./Api/Product/prod.router");
-
+const courseRouter = require("./Api/Course/course.router");
 
 
 
@@ -191,6 +206,7 @@ app.use("/Api/User", userRouter);
 app.use("/Api/Category", catRouter);
 app.use("/Api/Brand", brandRouter);
 app.use("/Api/Product", prodRouter);
+app.use("/Api/Course", courseRouter);
 
 
 
@@ -233,6 +249,23 @@ app.post("/avatarUpload",avatarUpload.single('avatar'), (req, res) => {
     });
 })
 
+app.use('/coursepic', express.static('upload/CoursePics'));
+app.post("/coursepicUpload",coursepicUpload.single('coursepic'), (req, res) => {
+    res.json({
+        success: 1,
+        coursepic_url: `http://localhost:5000/coursepic/${req.file.filename}`
+    })
+
+    Jimp.read(`http://localhost:5000/coursepic/${req.file.filename}`)
+    .then(lenna => {
+        return lenna
+        .contain(300, 300) // resize
+        .write(`upload/CoursePics/${req.file.filename}`); // save
+    })
+    .catch(err => {
+        console.error(err);
+    });
+})
 
 //PORT
 const port = process.env.PORT || 3000; 
