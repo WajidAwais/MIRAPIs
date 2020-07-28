@@ -219,7 +219,7 @@ module.exports = {
     },
     onRentProdsByRentee: (id,callBack) => {
         pool.query(
-            `SELECT p.product_id, p.title, u.full_name, LEFT(r.rent_from,10) as rent_from, r.days, p.price_per_day*r.days as price_per_day from product p join rent_record r on (r.product_id = p.product_id) join user u on(p.renter_id = u.user_id) where r.on_rent = 1 and r.rentee_id = ?`,
+            `SELECT p.product_id, p.title, u.user_id, u.full_name, LEFT(r.rent_from,10) as rent_from, r.days, p.price_per_day*r.days as price_per_day from product p join rent_record r on (r.product_id = p.product_id) join user u on(p.renter_id = u.user_id) where r.on_rent = 1 and r.rentee_id = ?`,
             [id],
             (error, results, fields) => {
                 if(error) {
@@ -257,6 +257,27 @@ module.exports = {
         pool.query(
             `SELECT p.title, u.full_name, LEFT(s.sell_date,10) as sell_date, p.actual_price from sell_record s join product p on (s.product_id = p.product_id) join user u on(s.buyer_id = u.user_id) where p.renter_id = ?`,
             [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    productReview: (data, callBack) => {
+        pool.query(
+            `insert into product_review(review_id, rentee_id, renter_id, product_id, rating, comment, date_added)
+            values (?,?,?,?,?,?,?)`,
+            [
+                ,
+                data.renteeid,
+                data.renterid,
+                data.productid,
+                data.rating,
+                data.comment,
+                data.dateadded
+            ],
             (error, results, fields) => {
                 if(error) {
                     return callBack(error);

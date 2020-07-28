@@ -8,7 +8,8 @@ const { createProduct, createProdpic, getAllProd,getProductByUserID,disableProdu
         updateRentRecordStatus,
         ProductsHistoryByUserId,
         BuyProductsHistory,
-        SellProductsHistory } = require("./prod.controller");
+        SellProductsHistory,
+        ProductReview, } = require("./prod.controller");
 
 const router = require("express").Router();
 const { checkToken } = require("../../Auth/token_validation");
@@ -38,5 +39,6 @@ router.patch("/UpdateRentRecord",checkToken,updateRentRecordStatus);
 router.get("/BuyHistory/:id",checkToken,BuyProductsHistory);
 router.get("/SellHistory/:id",checkToken,SellProductsHistory);
 
+router.post("/ProductReview",checkToken,ProductReview);
 
 module.exports = router;

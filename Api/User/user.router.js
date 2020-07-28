@@ -1,4 +1,4 @@
-const { createUser, getUserByUserId, updateUserById, login, getCategory, getEmail} = require("./user.controller");
+const { createUser, getUserByUserId, updateUserById, login, getCategory, getEmail, ProfileReview, AddInstructor, UpdateUserType, getInstructorByUserId} = require("./user.controller");
 const router = require("express").Router();
 
 const { checkToken } = require("../../Auth/token_validation");
@@ -9,6 +9,11 @@ router.patch("/",checkToken,updateUserById);
 router.get("/cat",checkToken,getCategory);
 router.post("/Email",getEmail);
 
+router.post("/ProfileReview",checkToken,ProfileReview);
+
+router.post("/AddInstructor",checkToken,AddInstructor);
+router.patch("/UpdateUserType",checkToken,UpdateUserType);
+router.get("/GetInstructor/:id",getInstructorByUserId);
 
 router.post("/login",login);
 module.exports = router;

@@ -1,6 +1,5 @@
 
-const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord, onRentProdsByUserId, ProdsHistoryByRentee, onRentProdsByRentee, updateRentStatus, ProdsHistoryByUserId, BuyProdsHistory, SellProdsHistory } = require("./prod.service");
-
+const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord, onRentProdsByUserId, ProdsHistoryByRentee, onRentProdsByRentee, updateRentStatus, ProdsHistoryByUserId, BuyProdsHistory, SellProdsHistory, productReview } = require("./prod.service");
 
 module.exports = {
     createProduct: (req, res) => {
@@ -323,6 +322,22 @@ module.exports = {
                 });
             }
             return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    ProductReview: (req, res) => {
+        const body = req.body;
+        productReview(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            return res.status(200).json({
                 success: 1,
                 data: results
             })

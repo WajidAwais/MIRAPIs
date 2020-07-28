@@ -1,4 +1,4 @@
-const { create, getUserById, updateUser, getUserByEmail, getCategories, getUserEmail } = require("./user.service");
+const { create, getUserById, updateUser, getUserByEmail, getCategories, getUserEmail, profileReview, addInstructor, updateUserType, getInstructorById} = require("./user.service");
 
 const { sign } = require("jsonwebtoken")
 
@@ -67,7 +67,6 @@ module.exports = {
         const body = req.body;
         updateUser(body, (err, results) => {
             if(err){
-                console.log(err);
                 return res.status(500).json({
                     success: 0,
                     message: "Database Connection Error"
@@ -137,5 +136,80 @@ module.exports = {
                 data: results
             })
         });
-    }
+    },
+    ProfileReview: (req, res) => {
+        const body = req.body;
+        profileReview(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            return res.status(200).json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    AddInstructor: (req, res) => {
+        const body = req.body;
+        addInstructor(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            return res.status(200).json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    UpdateUserType: (req, res) => {
+        const body = req.body;
+        updateUserType(body, (err, results) => {
+            if(err){
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Failed to update user"
+                })
+            }
+                return res.json({
+                success: 1,
+                message: "updated Successfully"
+            })
+        });
+    },
+    getInstructorByUserId: (req, res) => {
+        const id = req.params.id;
+        getInstructorById(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
 }

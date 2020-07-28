@@ -51,7 +51,6 @@ module.exports = {
         );
     },
     updateUser: (data, callBack) => {
-        console.log("Hello"+data.avatar);
         pool.query(
             `update user set full_name=?, email=?, phone=?, avatar=?,address=?,about=? where user_id = ?`,
             [
@@ -95,5 +94,72 @@ module.exports = {
                 return callBack(null, results);
             }
         );
-    }
+    },
+    profileReview: (data, callBack) => {
+        pool.query(
+            `insert into profile_review(review_id, user_id, reviewer_id, rating, comment, date_added)
+            values (?,?,?,?,?,?)`,
+            [
+                ,
+                data.userid,
+                data.reviewerid,
+                data.rating,
+                data.comment,
+                data.dateadded
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    addInstructor: (data, callBack) => {
+        pool.query(
+            `insert into instructor(instructor_id, user_id, expertise, experience, description)
+            values (?,?,?,?,?)`,
+            [
+                ,
+                data.userid,
+                data.expertise,
+                data.experience,
+                data.description
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    updateUserType: (data, callBack) => {
+        pool.query(
+            `update user set user_type=? where user_id = ?`,
+            [
+                data.usertype,
+                data.userid
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+        
+    },
+    getInstructorById: (id, callBack) => {
+        pool.query(
+            `select * from instructor where user_id= ?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results[0]);
+            }
+        );
+    },
 };
