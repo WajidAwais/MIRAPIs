@@ -177,6 +177,13 @@ const coursepicStorage = multer.diskStorage({
     }
 })
 
+const videoStorage = multer.diskStorage({
+    destination: './upload/Videos',
+    filename: (req, file, cb)=>{
+        return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+    }
+})
+
 const upload = multer({
     storage: storage
 })
@@ -189,6 +196,9 @@ const coursepicUpload = multer({
     storage:coursepicStorage
 })
 
+const videoUpload = multer({
+    storage:videoStorage
+})
 
 
 
@@ -264,6 +274,14 @@ app.post("/coursepicUpload",coursepicUpload.single('coursepic'), (req, res) => {
     })
     .catch(err => {
         console.error(err);
+    });
+})
+
+app.use('/video', express.static('upload/Videos'));
+app.post("/videoUpload",videoUpload.single('video'), (req, res) => {
+    res.json({
+        success: 1,
+        video_url: `http://localhost:5000/video/${req.file.filename}`
     });
 })
 

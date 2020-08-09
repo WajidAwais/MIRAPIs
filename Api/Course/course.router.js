@@ -1,8 +1,23 @@
-const { createCourse } = require("./course.controller");
+const { createCourse, getAllCourses, AddLesson, getLessonByCourseID, getTotalVideosByCourseID,enrollCourse,disableCourse, getEnrolledCourse, CourseReview, getUserID } = require("./course.controller");
 const router = require("express").Router();
 
 const { checkToken } = require("../../Auth/token_validation");
 
-router.post("/",createCourse);
+router.post("/",checkToken,createCourse);
+router.get("/",getAllCourses);
+
+router.patch("/ByCourseID",checkToken,disableCourse);
+
+router.post("/AddLesson",checkToken,AddLesson);
+
+router.get("/LessonByCourseId/:id",checkToken,getLessonByCourseID);
+router.get("/TotalVideos/:id",getTotalVideosByCourseID);
+router.post("/EnrollCourse",checkToken,enrollCourse);
+
+router.get("/EnrolledCourse/:id",checkToken,getEnrolledCourse);
+
+router.post("/CourseReview",checkToken,CourseReview);
+
+router.get("/UserId/:id",checkToken,getUserID);
 
 module.exports = router;
