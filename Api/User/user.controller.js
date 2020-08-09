@@ -1,4 +1,4 @@
-const { create, getUserById, updateUser, getUserByEmail, getCategories, getUserEmail, profileReview, addInstructor, updateUserType, getInstructorById} = require("./user.service");
+const { create, getUserById, updateUser, getUserByEmail, getInstructorByEmail, getCategories, getUserEmail, profileReview, addInstructor, updateUserType, getInstructorById} = require("./user.service");
 
 const { sign } = require("jsonwebtoken")
 
@@ -107,6 +107,32 @@ module.exports = {
                     message: "login successfully",
                     data: results,
                     token: jsontoken
+                });
+            }else{
+                return res.json({
+                    success: 0,
+                    message: "Invalid Email or Password",
+                });
+            }
+        });
+    },
+    instructordata: (req, res) => {
+        const body = req.body;
+        getInstructorByEmail(body.email, (err, results) => {
+            if(err){
+                console.log(err);
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Invalid email or password"
+                })
+            }
+            const result = (body.password == results.password);
+            if(result){
+                return res.json({
+                    success: 1,
+                    data: results,
                 });
             }else{
                 return res.json({

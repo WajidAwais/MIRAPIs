@@ -73,7 +73,19 @@ module.exports = {
     },
     getUserByEmail: (email, callBack) => {
         pool.query(
-            `select * from user where email = ?`,
+            `select * from user where email=?`,
+            [email],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results[0]);
+            }
+        );
+    },
+    getInstructorByEmail: (email, callBack) => {
+        pool.query(
+            `select u.*, i.instructor_id, i.expertise, i.experience, i.description from user u join instructor i on (u.user_id=i.user_id) where email=?`,
             [email],
             (error, results, fields) => {
                 if(error) {
