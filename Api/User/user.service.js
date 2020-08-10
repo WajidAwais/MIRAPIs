@@ -107,6 +107,18 @@ module.exports = {
             }
         );
     },
+    getUsers: callBack => {
+        pool.query(
+            `select user_id, full_name from user`,
+            [],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
     profileReview: (data, callBack) => {
         pool.query(
             `insert into profile_review(review_id, user_id, reviewer_id, rating, comment, date_added)
@@ -171,6 +183,30 @@ module.exports = {
                     return callBack(error);
                 }
                 return callBack(null, results[0]);
+            }
+        );
+    },
+    getUserReviewsById: (id, callBack) => {
+        pool.query(
+            `select review_id,user_id,reviewer_id,comment,rating,LEFT(date_added,10) as date_added from profile_review where user_id= ?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    getUserRatingById: (id, callBack) => {
+        pool.query(
+            `select AVG(rating) as rating from profile_review where user_id= ?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
             }
         );
     },

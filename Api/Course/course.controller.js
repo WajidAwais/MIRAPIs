@@ -1,4 +1,8 @@
-const { create, getcourses, createLesson, getLessonByCourseId, getTotalVideos,enrollcourse, updateCourseStatus, getEnrollCourse, courseReview, getUserId } = require("./course.service");
+const { create, getcourses, createLesson, getLessonByCourseId, getTotalVideos,enrollcourse, updateCourseStatus, getEnrollCourse, courseReview,
+        getUserId,
+        getCourseRatingById,
+        getCourseReviewsById,
+    } = require("./course.service");
 
 module.exports = {
     createCourse: (req, res) => {
@@ -168,7 +172,6 @@ module.exports = {
             })
         });
     },
-
     getUserID: (req, res) => {
         const instructorid = req.params.id
         getUserId(instructorid,(err, results) => {
@@ -191,5 +194,48 @@ module.exports = {
             })
         });
     },
-
+    getCourseReviewsByUserId: (req, res) => {
+        const id = req.params.id;
+        getCourseReviewsById(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    getCourseRatingByUserId: (req, res) => {
+        const id = req.params.id;
+        getCourseRatingById(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
 }

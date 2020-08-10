@@ -75,7 +75,7 @@ module.exports = {
     },
     getLessonByCourseId: (courseid, callBack) => {
         pool.query(
-            `select l.lesson_id,l.title,l.status,LEFT(l.date_added,10) AS date_added, l.video_file_name from lesson l where l.course_id=? ORDER BY l.lesson_id DESC`,
+            `select l.lesson_id,l.title,l.status,LEFT(l.date_added,10) AS date_added, l.video_file_name from lesson l where l.course_id=? and l.status=1 ORDER BY l.lesson_id DESC`,
             [courseid],
             (error, results, fields) => {
                 if(error) {
@@ -151,6 +151,30 @@ module.exports = {
         pool.query(
             `select user_id from instructor where instructor_id=?`,
             [instructorid],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    getCourseReviewsById: (id, callBack) => {
+        pool.query(
+            `select review_id,reviewer_id,comment,rating,LEFT(date_added,10) as date_added from course_review where course_id= ?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    getCourseRatingById: (id, callBack) => {
+        pool.query(
+            `select AVG(rating) as rating from course_review where course_id= ?`,
+            [id],
             (error, results, fields) => {
                 if(error) {
                     return callBack(error);

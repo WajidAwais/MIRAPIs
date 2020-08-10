@@ -1,4 +1,4 @@
-const { create, getUserById, updateUser, getUserByEmail, getInstructorByEmail, getCategories, getUserEmail, profileReview, addInstructor, updateUserType, getInstructorById} = require("./user.service");
+const { create, getUserById, updateUser, getUserByEmail, getInstructorByEmail, getCategories, getUsers, getUserEmail, profileReview, addInstructor, updateUserType, getInstructorById, getUserReviewsById, getUserRatingById} = require("./user.service");
 
 const { sign } = require("jsonwebtoken")
 
@@ -142,6 +142,27 @@ module.exports = {
             }
         });
     },
+    getUser: (req, res) => {
+        getUsers((err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
     getCategory: (req, res) => {
         getCategories((err, results) => {
             if(err){
@@ -219,6 +240,50 @@ module.exports = {
     getInstructorByUserId: (req, res) => {
         const id = req.params.id;
         getInstructorById(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    getUserReviewsByUserId: (req, res) => {
+        const id = req.params.id;
+        getUserReviewsById(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    getUserRatingByUserId: (req, res) => {
+        const id = req.params.id;
+        getUserRatingById(id, (err, results) => {
             if(err){
                 console.log(err);
                 return res.status(500).json({

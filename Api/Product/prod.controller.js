@@ -1,5 +1,5 @@
 
-const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord, onRentProdsByUserId, ProdsHistoryByRentee, onRentProdsByRentee, updateRentStatus, ProdsHistoryByUserId, BuyProdsHistory, SellProdsHistory, productReview } = require("./prod.service");
+const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord, onRentProdsByUserId, ProdsHistoryByRentee, onRentProdsByRentee, updateRentStatus, ProdsHistoryByUserId, BuyProdsHistory, SellProdsHistory, productReview, getProductRatingById, getProductReviewsById } = require("./prod.service");
 
 module.exports = {
     createProduct: (req, res) => {
@@ -338,6 +338,50 @@ module.exports = {
                 });
             }
             return res.status(200).json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    getProductReviewsByUserId: (req, res) => {
+        const id = req.params.id;
+        getProductReviewsById(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    getProductRatingByUserId: (req, res) => {
+        const id = req.params.id;
+        getProductRatingById(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
                 success: 1,
                 data: results
             })
