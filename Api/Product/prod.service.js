@@ -286,4 +286,29 @@ module.exports = {
             }
         );
     },
+    
+    getProductReviewsById: (id, callBack) => {
+        pool.query(
+            `select review_id,rentee_id,renter_id,comment,rating,LEFT(date_added,10) as date_added from product_review where product_id= ?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    getProductRatingById: (id, callBack) => {
+        pool.query(
+            `select AVG(rating) as rating from product_review where product_id= ?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
 };

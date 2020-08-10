@@ -1,9 +1,10 @@
-const { createUser, getUserByUserId, updateUserById, login, instructordata, getCategory, getEmail, ProfileReview, AddInstructor, UpdateUserType, getInstructorByUserId} = require("./user.controller");
+const { createUser, getUserByUserId, updateUserById, login, instructordata, getUser,getCategory, getEmail, ProfileReview, AddInstructor, UpdateUserType, getInstructorByUserId, getUserReviewsByUserId, getUserRatingByUserId} = require("./user.controller");
 const router = require("express").Router();
 
 const { checkToken } = require("../../Auth/token_validation");
 
 router.post("/",createUser);
+router.get("/",getUser);
 router.get("/:id",getUserByUserId);
 router.patch("/",checkToken,updateUserById);
 router.get("/cat",checkToken,getCategory);
@@ -16,6 +17,9 @@ router.patch("/UpdateUserType",checkToken,UpdateUserType);
 router.get("/GetInstructor/:id",getInstructorByUserId);
 
 router.post("/instructordata",instructordata);
+
+router.get("/GetReviews/:id",getUserReviewsByUserId);
+router.get("/GetRating/:id",getUserRatingByUserId);
 
 router.post("/login",login);
 module.exports = router;

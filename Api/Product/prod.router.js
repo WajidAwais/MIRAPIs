@@ -9,7 +9,10 @@ const { createProduct, createProdpic, getAllProd,getProductByUserID,disableProdu
         ProductsHistoryByUserId,
         BuyProductsHistory,
         SellProductsHistory,
-        ProductReview, } = require("./prod.controller");
+        ProductReview,
+        getProductRatingByUserId,
+        getProductReviewsByUserId
+    } = require("./prod.controller");
 
 const router = require("express").Router();
 const { checkToken } = require("../../Auth/token_validation");
@@ -40,5 +43,8 @@ router.get("/BuyHistory/:id",checkToken,BuyProductsHistory);
 router.get("/SellHistory/:id",checkToken,SellProductsHistory);
 
 router.post("/ProductReview",checkToken,ProductReview);
+
+router.get("/GetReviews/:id",getProductReviewsByUserId);
+router.get("/GetRating/:id",getProductRatingByUserId);
 
 module.exports = router;
