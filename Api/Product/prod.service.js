@@ -88,7 +88,7 @@ module.exports = {
     },
     getPicsByProdId: (productID, callBack) => {
         pool.query(
-            `select * from picture where product_id = ? && is_main_picture = 0 LIMIT 4`,
+            `select * from picture where product_id = ? and is_main_picture=0 LIMIT 4`,
             [productID],
             (error, results, fields) => {
                 if(error) {

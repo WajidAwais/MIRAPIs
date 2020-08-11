@@ -2,6 +2,8 @@ const { createCourse, getAllCourses, AddLesson, getLessonByCourseID, getTotalVid
         getUserID,
         getCourseRatingByUserId,
         getCourseReviewsByUserId,
+        getEnrolled,
+        disableLesson
     } = require("./course.controller");
 const router = require("express").Router();
 
@@ -23,9 +25,13 @@ router.get("/EnrolledCourse/:id",checkToken,getEnrolledCourse);
 
 router.post("/CourseReview",checkToken,CourseReview);
 
-router.get("/UserId/:id",checkToken,getUserID);
+router.get("/UserId/:id",getUserID);
 
 router.get("/GetReviews/:id",getCourseReviewsByUserId);
 router.get("/GetRating/:id",getCourseRatingByUserId);
+
+router.get("/GetEnrolledCourse/:sid/:cid",getEnrolled);
+
+router.patch("/ByLessonID",checkToken,disableLesson);
 
 module.exports = router;

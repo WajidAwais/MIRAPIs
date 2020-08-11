@@ -176,7 +176,7 @@ module.exports = {
     },
     getInstructorById: (id, callBack) => {
         pool.query(
-            `select * from instructor where user_id= ?`,
+            `select u.*, i.instructor_id, i.expertise, i.experience, i.description from user u join instructor i on (u.user_id=i.user_id) where u.user_id= ?`,
             [id],
             (error, results, fields) => {
                 if(error) {

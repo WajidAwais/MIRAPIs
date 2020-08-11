@@ -2,6 +2,8 @@ const { create, getcourses, createLesson, getLessonByCourseId, getTotalVideos,en
         getUserId,
         getCourseRatingById,
         getCourseReviewsById,
+        getEnroll,
+        updateLessonStatus,
     } = require("./course.service");
 
 module.exports = {
@@ -235,6 +237,45 @@ module.exports = {
             return res.json({
                 success: 1,
                 data: results
+            })
+        });
+    },
+    getEnrolled: (req, res) => {
+        const studentid = req.params.sid;
+        const courseid = req.params.cid;
+        getEnroll(studentid,courseid, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    disableLesson: (req, res) => {
+        const data = req.body;
+        updateLessonStatus(data, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            return res.json({
+                success: 1,
+                message: "updated successfully"
             })
         });
     },
