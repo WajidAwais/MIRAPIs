@@ -87,7 +87,7 @@ module.exports = {
     },
     getTotalVideos: (courseid, callBack) => {
         pool.query(
-            `select COUNT(lesson_id) as totalVideos from lesson where course_id=?`,
+            `select COUNT(lesson_id) as totalVideos from lesson where course_id=? and status=1`,
             [courseid],
             (error, results, fields) => {
                 if(error) {
@@ -182,5 +182,37 @@ module.exports = {
                 return callBack(null, results);
             }
         );
+    },
+    getEnroll: (studentid,courseid, callBack) => {
+        pool.query(
+            `select student_id,course_id from enroll_course where student_id=? and course_id=?`,
+            [
+                studentid,
+                courseid
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    updateLessonStatus: (data, callBack) => {
+        pool.query(
+            `update lesson set status=? where lesson_id = ?`,
+            [
+                data.status,
+                data.lessonid
+            ],
+
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+
     },
 };
