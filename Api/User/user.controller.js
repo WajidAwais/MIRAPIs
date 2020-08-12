@@ -1,4 +1,4 @@
-const { create, getUserById, updateUser, getUserByEmail, getInstructorByEmail, getCategories, getUsers, getUserEmail, profileReview, addInstructor, updateUserType, getInstructorById, getUserReviewsById, getUserRatingById} = require("./user.service");
+const { create, getUserById, updateUser, getUserByEmail, getInstructorByEmail, getCategories, getUsers, getUserEmail, profileReview, addInstructor, updateUserType, getInstructorById, getUserReviewsById, getUserRatingById, getUserPassword, updatePassword} = require("./user.service");
 
 const { sign } = require("jsonwebtoken")
 
@@ -19,7 +19,6 @@ module.exports = {
             })
         });
     },
-    
     getEmail: (req, res) => {
         const body = req.body.email;
         getUserEmail(body, (err, results) => {
@@ -300,6 +299,48 @@ module.exports = {
             return res.json({
                 success: 1,
                 data: results
+            })
+        });
+    },
+    getUserPasswordById: (req, res) => {
+        const body = req.body;
+        getUserPassword(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+            })
+        });
+    },
+    updatePasswordById: (req, res) => {
+        const body = req.body;
+        updatePassword(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
             })
         });
     },

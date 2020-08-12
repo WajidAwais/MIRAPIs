@@ -286,7 +286,6 @@ module.exports = {
             }
         );
     },
-    
     getProductReviewsById: (id, callBack) => {
         pool.query(
             `select review_id,rentee_id,renter_id,comment,rating,LEFT(date_added,10) as date_added from product_review where product_id= ?`,
@@ -303,6 +302,30 @@ module.exports = {
         pool.query(
             `select AVG(rating) as rating from product_review where product_id= ?`,
             [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    deletePics: (id,callBack) => {
+        pool.query(
+            `delete from picture where product_id=?`,
+            [id],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    allprods: callBack => {
+        pool.query(
+            `select product_id,renter_id,category_id,brand_id,title,product_type,description,LEFT(date_added,10) AS date_added,IF(status=1,'active','inactive') as status,IF(product_type='rent',price_per_day,'---') as price_per_day, actual_price from product ORDER BY product_id DESC` ,
+            [],
             (error, results, fields) => {
                 if(error) {
                     return callBack(error);

@@ -4,6 +4,7 @@ const { create, getcourses, createLesson, getLessonByCourseId, getTotalVideos,en
         getCourseReviewsById,
         getEnroll,
         updateLessonStatus,
+        allcourses,
     } = require("./course.service");
 
 module.exports = {
@@ -276,6 +277,27 @@ module.exports = {
             return res.json({
                 success: 1,
                 message: "updated successfully"
+            })
+        });
+    },
+    getAllCourse: (req, res) => {
+        allcourses((err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
             })
         });
     },

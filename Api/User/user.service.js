@@ -210,4 +210,34 @@ module.exports = {
             }
         );
     },
+    getUserPassword: (data, callBack) => {
+        pool.query(
+            `select password from user where user_id=? and password=?`,
+            [
+                data.userid,
+                data.pass
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results[0]);
+            }
+        );
+    },
+    updatePassword: (data, callBack) => {
+        pool.query(
+            `update user set password=? where user_id=?`,
+            [
+                data.pass,
+                data.userid
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results[0]);
+            }
+        );
+    },
 };
