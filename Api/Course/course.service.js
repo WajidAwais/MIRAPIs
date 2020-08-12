@@ -215,4 +215,16 @@ module.exports = {
         );
 
     },
+    allcourses: callBack => {
+        pool.query(
+            `select course_id,instructor_id,category_id,title,description,LEFT(date_added,10) AS date_added,IF(status=1,'active','inactive') as status ,price from course ORDER BY course_id DESC` ,
+            [],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
 };

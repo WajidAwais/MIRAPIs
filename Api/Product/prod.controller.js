@@ -1,5 +1,5 @@
 
-const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord, onRentProdsByUserId, ProdsHistoryByRentee, onRentProdsByRentee, updateRentStatus, ProdsHistoryByUserId, BuyProdsHistory, SellProdsHistory, productReview, getProductRatingById, getProductReviewsById } = require("./prod.service");
+const { create, productpic, getprods, getProdsByUserID,updateProdStatus,update,productpicupdate,getPicsByProdId, rentRecord, sellRecord, onRentProdsByUserId, ProdsHistoryByRentee, onRentProdsByRentee, updateRentStatus, ProdsHistoryByUserId, BuyProdsHistory, SellProdsHistory, productReview, getProductRatingById, getProductReviewsById, deletePics, allprods } = require("./prod.service");
 
 module.exports = {
     createProduct: (req, res) => {
@@ -368,6 +368,49 @@ module.exports = {
     getProductRatingByUserId: (req, res) => {
         const id = req.params.id;
         getProductRatingById(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    DeletePics: (req, res) => {
+        const id = req.params.id
+        deletePics(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            })
+        });
+    },
+    getAllProds: (req, res) => {
+        allprods((err, results) => {
             if(err){
                 console.log(err);
                 return res.status(500).json({

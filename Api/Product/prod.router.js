@@ -11,7 +11,9 @@ const { createProduct, createProdpic, getAllProd,getProductByUserID,disableProdu
         SellProductsHistory,
         ProductReview,
         getProductRatingByUserId,
-        getProductReviewsByUserId
+        getProductReviewsByUserId,
+        DeletePics,
+        getAllProds
     } = require("./prod.controller");
 
 const router = require("express").Router();
@@ -46,5 +48,9 @@ router.post("/ProductReview",checkToken,ProductReview);
 
 router.get("/GetReviews/:id",getProductReviewsByUserId);
 router.get("/GetRating/:id",getProductRatingByUserId);
+
+router.delete("/DeletePics/:id",DeletePics);
+
+router.get("/All",checkToken,getAllProds);
 
 module.exports = router;

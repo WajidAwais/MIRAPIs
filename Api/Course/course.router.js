@@ -3,7 +3,8 @@ const { createCourse, getAllCourses, AddLesson, getLessonByCourseID, getTotalVid
         getCourseRatingByUserId,
         getCourseReviewsByUserId,
         getEnrolled,
-        disableLesson
+        disableLesson,
+        getAllCourse
     } = require("./course.controller");
 const router = require("express").Router();
 
@@ -33,5 +34,7 @@ router.get("/GetRating/:id",getCourseRatingByUserId);
 router.get("/GetEnrolledCourse/:sid/:cid",getEnrolled);
 
 router.patch("/ByLessonID",checkToken,disableLesson);
+
+router.get("/All",checkToken,getAllCourse);
 
 module.exports = router;
