@@ -7,7 +7,7 @@ const path = require("path");
 const cors = require("cors");
 // const uuid = require("uuid/dist/v4");
 const { v4: uuidv4 } = require('uuid');
-
+const { verifyToken } = require("./Auth/token_validation");
 
 var Jimp = require('jimp');
 
@@ -284,6 +284,8 @@ app.post("/videoUpload",videoUpload.single('video'), (req, res) => {
         video_url: `http://localhost:5000/video/${req.file.filename}`
     });
 })
+
+app.get("/Reset",verifyToken);
 
 //PORT
 const port = process.env.PORT || 3000; 

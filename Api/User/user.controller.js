@@ -1,4 +1,4 @@
-const { create, getUserById, updateUser, getUserByEmail, getInstructorByEmail, getCategories, getUsers, getUserEmail, profileReview, addInstructor, updateUserType, getInstructorById, getUserReviewsById, getUserRatingById, getUserPassword, updatePassword} = require("./user.service");
+const { create, getUserById, updateUser, getUserByEmail, getInstructorByEmail, getCategories, getUsers, getUserEmail, profileReview, addInstructor, updateUserType, getInstructorById, getUserReviewsById, getUserRatingById, getUserPassword, updatePassword, updatePasswordByEmail} = require("./user.service");
 
 const { sign } = require("jsonwebtoken")
 
@@ -326,6 +326,76 @@ module.exports = {
     updatePasswordById: (req, res) => {
         const body = req.body;
         updatePassword(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: "Database Connection Error"
+                });
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Record Not Found"
+                });
+            }
+            return res.json({
+                success: 1,
+            })
+        });
+    },
+    Forgot: (req, res) => {
+        const body = req.body;
+        getUserByEmail(body.email, (err, results) => {
+            if(err){
+                console.log(err);
+            }
+            if(!results) {
+                return res.json({
+                    success: 0,
+                    message: "Invalid email"
+                })
+            }
+            const result = (body.email == results.email);
+            if(result){
+                const forgottoken = sign({ result: results }, "evaluation", {
+                    expiresIn: "10min"
+                });
+                /////////////////////////////mailer
+                const mailgun = require("mailgun-js");
+                const DOMAIN = "sandbox7531e743ab3840afaf0a598bbba63d99.mailgun.org";
+                const mg = mailgun({apiKey: "7aeeccccf582551c760b8fb8d3045cd5-07e45e2a-7d395aac", domain: DOMAIN});
+                const data = {
+                    from: "ranahamzanadeem27@gmail.com",
+                    to: body.email,
+                    subject: "Forgot Password Request",
+                    text: 'To reset your password, please click the link below.\n\nhttp://localhost:3000/ResetPassword?token='+forgottoken,
+                };
+                mg.messages().send(data, function (error, body) {
+                    console.log(body);
+                });
+
+
+                /////////////////////////////mailer
+
+
+                return res.json({
+                    success: 1,
+                    message: "Mail sent successfully",
+                    data: results,
+                    token: forgottoken
+                });
+            }else{
+                return res.json({
+                    success: 0,
+                    message: "Invalid Email or Password",
+                });
+            }
+        });
+    },
+    UpdatePasswordByEmail: (req, res) => {
+        const body = req.body;
+        updatePasswordByEmail(body, (err, results) => {
             if(err){
                 console.log(err);
                 return res.status(500).json({

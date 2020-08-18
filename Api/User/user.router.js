@@ -1,4 +1,4 @@
-const { createUser, getUserByUserId, updateUserById, login, instructordata, getUser,getCategory, getEmail, ProfileReview, AddInstructor, UpdateUserType, getInstructorByUserId, getUserReviewsByUserId, getUserRatingByUserId, getUserPasswordById, updatePasswordById} = require("./user.controller");
+const { createUser, getUserByUserId, updateUserById, login, instructordata, getUser,getCategory, getEmail, ProfileReview, AddInstructor, UpdateUserType, getInstructorByUserId, getUserReviewsByUserId, getUserRatingByUserId, getUserPasswordById, updatePasswordById, Forgot, UpdatePasswordByEmail} = require("./user.controller");
 const router = require("express").Router();
 
 const { checkToken } = require("../../Auth/token_validation");
@@ -21,9 +21,12 @@ router.post("/instructordata",instructordata);
 router.get("/GetReviews/:id",getUserReviewsByUserId);
 router.get("/GetRating/:id",getUserRatingByUserId);
 
-
 router.post("/Password",checkToken,getUserPasswordById);
 router.patch("/UpdatePassword",checkToken,updatePasswordById);
+
+router.patch("/UpdatePasswordByEmail",UpdatePasswordByEmail);
+
+router.post("/ForgotPassword",Forgot);
 
 
 

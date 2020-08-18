@@ -240,4 +240,19 @@ module.exports = {
             }
         );
     },
+    updatePasswordByEmail: (data, callBack) => {
+        pool.query(
+            `update user set password=? where email=?`,
+            [
+                data.pass,
+                data.useremail
+            ],
+            (error, results, fields) => {
+                if(error) {
+                    return callBack(error);
+                }
+                return callBack(null, results[0]);
+            }
+        );
+    },
 };
